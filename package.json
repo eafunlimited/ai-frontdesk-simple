@@ -1,0 +1,13 @@
+{
+  "name": "ai-frontdesk-simple-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "install": "pnpm install --frozen-lockfile",
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build"
+  },
+  "license": "MIT"
+}
