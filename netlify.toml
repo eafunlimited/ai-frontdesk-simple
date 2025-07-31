@@ -1,0 +1,10 @@
+[build]
+  base = "apps/web"
+  command = "pnpm install --frozen-lockfile && pnpm build"
+  publish = ".next"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
