@@ -5,7 +5,6 @@
   "workspaces": ["apps/*"],
   "scripts": {
     "preinstall": "corepack enable",
-    "install": "pnpm install --no-frozen-lockfile",
     "dev": "pnpm --filter web dev",
     "build": "pnpm --filter web build"
   },
