@@ -1,29 +1,25 @@
-// apps/web/app/api/hold/route.ts
+// apps/web/app/api/checkout/route.ts
 import { NextResponse } from "next/server";
-import { createHold } from "@/lib/booking";
+import { createCheckoutSession } from "@/lib/stripe";
 
 export async function POST(req: Request) {
   try {
-    const { slotId, customer } = await req.json();
+    const { appointmentId } = await req.json();
 
-    if (!slotId) {
+    if (!appointmentId) {
       return NextResponse.json(
-        { error: "Missing slot or customer information" },
+        { error: "Missing appointmentId" },
         { status: 400 }
       );
     }
 
-    // Our createHold returns a Promise<Hold>; await it and map fields
-    const hold = await createHold(slotId); // "customer" is ignored in the stub
-
-    return NextResponse.json({
-      appointmentId: hold.id,
-      holdExpiresAt: hold.expiresAt,
-    });
+    const { url } = await createCheckoutSession(appointmentId);
+    return NextResponse.json({ url });
   } catch (err: any) {
     return NextResponse.json(
-      { error: err?.message ?? "Unable to create hold" },
+      { error: err?.message ?? "Unable to create checkout session" },
       { status: 400 }
     );
   }
 }
+
