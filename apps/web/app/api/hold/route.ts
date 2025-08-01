@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     }
 
     const hold = await createHold(slotId, customer);
+
     return NextResponse.json({
       appointmentId: hold.id,
       holdExpiresAt: hold.expiresAt,
