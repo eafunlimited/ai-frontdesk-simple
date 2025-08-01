@@ -1,9 +1,7 @@
 [build]
-# run from the repo root so npm workspaces install correctly
-base    = ""
 publish = "apps/web/.next"
-# install everything, then build the web workspace
-command = "npm ci --workspaces --include-workspace-root --legacy-peer-deps && npm run -w apps/web build"
+command = "corepack enable && pnpm install --no-frozen-lockfile && pnpm --filter web build"
 
 [build.environment]
 NODE_VERSION = "20.12.2"
+PNPM_VERSION = "9.12.3"
