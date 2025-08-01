@@ -6,14 +6,18 @@ import { confirmHold } from "@/lib/booking";
 export async function POST(req: Request) {
   const signature = req.headers.get("stripe-signature") ?? "";
   const rawBody = await req.text();
+
   try {
     const event = await verifyWebhook(rawBody, signature);
+
     if (event?.type === "checkout.session.completed") {
-      const appointmentId = event.data?.appointmentId;
+      // assuming appointmentId is embedded in event.data
+      const appointmentId = event?.data?.appointmentId;
       if (appointmentId) {
         await confirmHold(appointmentId);
       }
     }
+
     return NextResponse.json({ received: true });
   } catch (err: any) {
     return NextResponse.json(
@@ -22,4 +26,5 @@ export async function POST(req: Request) {
     );
   }
 }
+
 
