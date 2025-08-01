@@ -5,7 +5,6 @@ import { createCheckoutSession } from "@/lib/stripe";
 export async function POST(req: Request) {
   try {
     const { appointmentId } = await req.json();
-
     if (!appointmentId) {
       return NextResponse.json(
         { error: "Missing appointmentId" },
