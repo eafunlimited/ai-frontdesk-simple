@@ -1,7 +1,10 @@
+# netlify.toml
 [build]
 publish = "apps/web/.next"
-command = "corepack enable && pnpm install --no-frozen-lockfile && pnpm --filter web build"
+# Netlify will do the install step once; we only run the build
+command = "corepack enable && pnpm --filter web build"
 
 [build.environment]
 NODE_VERSION = "20.12.2"
 PNPM_VERSION = "9.12.3"
+PNPM_CONFIG_FROZEN_LOCKFILE = "false"   # allow install without a lockfile
