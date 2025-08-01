@@ -5,29 +5,29 @@ import { confirmHold } from "@/lib/booking";
 
 export async function POST(req: Request) {
   try {
-    const { sessionId, appointmentId } = await req.json();
-
-    if (!sessionId || !appointmentId) {
+    const { sessionId } = await req.json();
+    if (!sessionId) {
       return NextResponse.json(
-        { error: "Missing sessionId or appointmentId" },
+        { error: "Missing sessionId" },
         { status: 400 }
       );
     }
 
     const session = await retrieveSession(sessionId);
-    if (session?.payment_status !== "paid") {
+    const appointmentId = session?.appointmentId;
+    if (!appointmentId) {
       return NextResponse.json(
-        { error: "Payment not completed" },
+        { error: "No appointment in session" },
         { status: 400 }
       );
     }
 
-    const confirmed = await confirmHold(appointmentId);
-    return NextResponse.json({ confirmed });
+    await confirmHold(appointmentId);
+    return NextResponse.json({ confirmed: true });
   } catch (err: any) {
     return NextResponse.json(
-      { error: err?.message ?? "Unable to confirm hold" },
-      { status: 500 }
+      { error: err?.message ?? "Confirmation failed" },
+      { status: 400 }
     );
   }
 }
