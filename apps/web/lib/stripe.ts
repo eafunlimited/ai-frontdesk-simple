@@ -1,18 +1,32 @@
 // apps/web/lib/stripe.ts
 
-// Minimal stub that returns a fake Stripe Checkout URL.
-// Replace with real Stripe SDK code later if desired.
 export async function createCheckoutSession(
   appointmentId: string
 ): Promise<{ url: string }> {
-  if (!appointmentId) {
-    throw new Error("appointmentId is required");
-  }
-
-  // Pretend we created a Stripe Checkout session and return a URL
+  if (!appointmentId) throw new Error("appointmentId is required");
   const url = `https://checkout.stripe.com/test_session?appointment=${encodeURIComponent(
     appointmentId
   )}`;
-
   return { url };
+}
+
+export type StripeSession = {
+  appointmentId?: string;
+};
+
+export async function retrieveSession(
+  sessionId: string
+): Promise<StripeSession> {
+  // Stub: replace with real Stripe SDK retrieval
+  if (!sessionId) throw new Error("sessionId is required");
+  return { appointmentId: sessionId };
+}
+
+export async function verifyWebhook(
+  rawBody: string,
+  signature: string
+): Promise<any> {
+  // Stub: replace with real signature verification logic.
+  if (!signature) throw new Error("Missing signature");
+  return JSON.parse(rawBody);
 }
