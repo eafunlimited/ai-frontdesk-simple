@@ -1,10 +1,9 @@
 [build]
-  base = "apps/web"
-  command = "pnpm install --frozen-lockfile && pnpm build"
-  publish = ".next"
+# run from the repo root so npm workspaces install correctly
+base    = ""
+publish = "apps/web/.next"
+# install everything, then build the web workspace
+command = "npm ci --workspaces --include-workspace-root --legacy-peer-deps && npm run -w apps/web build"
 
-[functions]
-  node_bundler = "esbuild"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+[build.environment]
+NODE_VERSION = "20.12.2"
