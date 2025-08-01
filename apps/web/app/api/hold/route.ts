@@ -1,23 +1,29 @@
 import { NextResponse } from "next/server";
-import { createCheckoutSession } from "@/lib/stripe";
+import { createHold } from "@/lib/booking";
 
 export async function POST(req: Request) {
   try {
-    const { appointmentId } = await req.json();
+    const { slotId, customer } = await req.json();
 
-    if (!appointmentId) {
+    if (!slotId || !customer) {
       return NextResponse.json(
-        { error: "Missing appointmentId" },
+        { error: "Missing slot or customer information" },
         { status: 400 }
       );
     }
 
-    const { url } = await createCheckoutSession(appointmentId);
-    return NextResponse.json({ url });
+    // createHold returns a Promise<Hold>; await it and return key fields
+    const hold = await createHold(slotId, customer);
+
+    return NextResponse.json({
+      appointmentId: hold.id,
+      holdExpiresAt: hold.expiresAt,
+    });
   } catch (err: any) {
     return NextResponse.json(
-      { error: err?.message ?? "Unable to create checkout session" },
+      { error: err?.message ?? "Unable to create hold" },
       { status: 400 }
     );
   }
 }
+
