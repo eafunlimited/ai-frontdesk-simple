@@ -8,7 +8,7 @@ export type Hold = {
 
 export type Slot = {
   id: string;
-  startsAt: string;       // ISO string
+  startsAt: string; // ISO string
   durationMinutes: number;
 };
 
@@ -19,7 +19,15 @@ export type Slot = {
 export async function getOpenSlots(date?: string): Promise<Slot[]> {
   const base = date ? new Date(date) : new Date();
   // start at 09:00 local time
-  const start = new Date(base.getFullYear(), base.getMonth(), base.getDate(), 9, 0, 0, 0);
+  const start = new Date(
+    base.getFullYear(),
+    base.getMonth(),
+    base.getDate(),
+    9,
+    0,
+    0,
+    0
+  );
 
   const slots: Slot[] = [];
   for (let i = 0; i < 8; i++) {
