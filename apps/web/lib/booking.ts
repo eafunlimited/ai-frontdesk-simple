@@ -1,58 +1,36 @@
 // apps/web/lib/booking.ts
 
-export type Slot = { start: string; end: string }
-export type Hold = {
-  id: string
-  slot: Slot
-  expiresAt: number
-  meta?: Record<string, unknown>
+export type Slot = { id: string; startsAt: string; endsAt: string };
+
+export async function getOpenSlots(date?: string): Promise<Slot[]> {
+  // Simple demo slots; replace with real availability later.
+  const base = date ?? new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  return [
+    { id: "slot_09", startsAt: `${base}T09:00:00.000Z`, endsAt: `${base}T09:30:00.000Z` },
+    { id: "slot_10", startsAt: `${base}T10:00:00.000Z`, endsAt: `${base}T10:30:00.000Z` },
+    { id: "slot_11", startsAt: `${base}T11:00:00.000Z`, endsAt: `${base}T11:30:00.000Z` },
+  ];
 }
 
-/**
- * Return a list of open appointment slots.
- * Stub returns an empty list so build succeeds.
- */
-export async function getOpenSlots(_opts?: { date?: string }): Promise<Slot[]> {
-  return []
+export type Hold = { id: string; slotId: string; expiresAt: string };
+
+export async function createHold(slotId: string): Promise<Hold> {
+  // Stub: create a 5-minute hold.
+  const expires = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+  return { id: `hold_${Math.random().toString(36).slice(2, 8)}`, slotId, expiresAt: expires };
 }
 
-/**
- * Create a temporary hold on a slot.
- * Stub returns a dummy hold object.
- */
-export async function createHold(_payload: any): Promise<Hold> {
-  const now = Date.now()
-  return {
-    id: "demo-hold",
-    slot: {
-      start: new Date(now).toISOString(),
-      end: new Date(now + 30 * 60 * 1000).toISOString(),
-    },
-    expiresAt: now + 5 * 60 * 1000,
-    meta: _payload ?? {},
-  }
+export async function getHold(holdId: string): Promise<Hold | null> {
+  // Stub: return a hold that “exists”.
+  const expires = new Date(Date.now() + 4 * 60 * 1000).toISOString();
+  return { id: holdId, slotId: "slot_09", expiresAt: expires };
 }
 
-/**
- * Retrieve a hold by id.
- * Stub returns a dummy hold object.
- */
-export async function getHold(id: string): Promise<Hold | null> {
-  const now = Date.now()
-  return {
-    id,
-    slot: {
-      start: new Date(now).toISOString(),
-      end: new Date(now + 30 * 60 * 1000).toISOString(),
-    },
-    expiresAt: now + 3 * 60 * 1000,
-  }
+export async function confirmHold(
+  holdId: string,
+  _data?: any
+): Promise<{ id: string; confirmed: boolean }> {
+  // Stub: mark the hold as confirmed.
+  return { id: holdId, confirmed: true };
 }
 
-/**
- * Confirm a hold.
- * Stub returns a minimal confirmation payload.
- */
-export async function confirmHold(id: string, _meta?: any): Promise<{ id: string; confirmed: true }> {
-  return { id, confirmed: true as const }
-}
