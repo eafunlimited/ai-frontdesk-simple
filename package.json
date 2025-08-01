@@ -1,11 +1,11 @@
 {
   "name": "ai-frontdesk-simple-monorepo",
   "private": true,
-  "workspaces": [
-    "apps/*"
-  ],
+  "packageManager": "pnpm@9.12.3",
+  "workspaces": ["apps/*"],
   "scripts": {
-    "install": "pnpm install --frozen-lockfile",
+    "preinstall": "corepack enable",
+    "install": "pnpm install --no-frozen-lockfile",
     "dev": "pnpm --filter web dev",
     "build": "pnpm --filter web build"
   },
